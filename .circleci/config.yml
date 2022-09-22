@@ -223,11 +223,11 @@ jobs:
         - attach_workspace:
            at: ~/      
 
-        # - run:
-        #     name: Configure server
-        #     command: |
-        #       # Your code here
-        #       exit 1
+        - run:
+             name: Configure server
+             command: |
+                ansible-playbook -i inventory.txt configure-server.yml
+        
         # Here's where you will add some code to rollback on failure     
 
         - run: 
