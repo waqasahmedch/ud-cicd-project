@@ -186,6 +186,11 @@ jobs:
           root: ~/
           paths:
             - project/.circleci/ansible/inventory.txt
+
+       - attach_workspace:
+          at: ~/
+       - run: cat ~/project/.circleci/ansible/inventory.txt
+       
        - run: 
           command: return 1
        -   destroy-environment
