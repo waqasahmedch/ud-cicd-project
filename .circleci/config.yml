@@ -153,6 +153,10 @@ jobs:
      steps:
        - checkout  
        - run:
+          name: installing tar package to persist the file 
+          command: | 
+               yum install -y tar gzip        
+       - run:
           name: Ensure backend infrastructure exists 
           command: | 
             aws cloudformation deploy \
