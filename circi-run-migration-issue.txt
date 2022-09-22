@@ -1,0 +1,289 @@
+#!/bin/bash -eo pipefail
+cd backend
+npm install
+npm i
+npm audit fix --audit-level=critical --force
+npm audit fix --force
+npm audit --audit-level=critical   
+npm run migrations > migrations_dump.txt            
+
+npm WARN @nestjs/cqrs@6.1.0 requires a peer of reflect-metadata@0.1.12 but none is installed. You must install peer dependencies yourself.
+npm WARN ajv-keywords@3.4.1 requires a peer of ajv@^6.9.1 but none is installed. You must install peer dependencies yourself.
+npm WARN winston-slack-webhook@0.1.6 requires a peer of winston@2.x.x but none is installed. You must install peer dependencies yourself.
+npm WARN glee2@1.0.0 No repository field.
+npm WARN optional SKIPPING OPTIONAL DEPENDENCY: fsevents@1.2.12 (node_modules/fsevents):
+npm WARN notsup SKIPPING OPTIONAL DEPENDENCY: Unsupported platform for fsevents@1.2.12: wanted {"os":"darwin","arch":"any"} (current: {"os":"linux","arch":"x64"})
+
+audited 1389 packages in 7.905s
+
+24 packages are looking for funding
+  run `npm fund` for details
+
+found 641 vulnerabilities (2 low, 144 moderate, 370 high, 125 critical)
+  run `npm audit fix` to fix them, or `npm audit` for details
+npm WARN @nestjs/cqrs@6.1.0 requires a peer of reflect-metadata@0.1.12 but none is installed. You must install peer dependencies yourself.
+npm WARN ajv-keywords@3.4.1 requires a peer of ajv@^6.9.1 but none is installed. You must install peer dependencies yourself.
+npm WARN winston-slack-webhook@0.1.6 requires a peer of winston@2.x.x but none is installed. You must install peer dependencies yourself.
+npm WARN glee2@1.0.0 No repository field.
+npm WARN optional SKIPPING OPTIONAL DEPENDENCY: fsevents@1.2.12 (node_modules/fsevents):
+npm WARN notsup SKIPPING OPTIONAL DEPENDENCY: Unsupported platform for fsevents@1.2.12: wanted {"os":"darwin","arch":"any"} (current: {"os":"linux","arch":"x64"})
+
+audited 1389 packages in 7.586s
+
+24 packages are looking for funding
+  run `npm fund` for details
+
+found 641 vulnerabilities (2 low, 144 moderate, 370 high, 125 critical)
+  run `npm audit fix` to fix them, or `npm audit` for details
+npm WARN using --force I sure hope you know what you are doing.
+
+> fsevents@1.2.12 install /home/circleci/project/backend/node_modules/fsevents
+> node-gyp rebuild
+
+make: Entering directory '/home/circleci/project/backend/node_modules/fsevents/build'
+  SOLINK_MODULE(target) Release/obj.target/.node
+  COPY Release/.node
+make: Leaving directory '/home/circleci/project/backend/node_modules/fsevents/build'
+npm WARN @nestjs/core@6.11.11 requires a peer of @nestjs/common@^6.0.0 but none is installed. You must install peer dependencies yourself.
+npm WARN @nestjs/cqrs@6.1.0 requires a peer of @nestjs/common@^6.0.0 but none is installed. You must install peer dependencies yourself.
+npm WARN @nestjs/cqrs@6.1.0 requires a peer of reflect-metadata@0.1.12 but none is installed. You must install peer dependencies yourself.
+npm WARN @nestjs/jwt@6.0.0 requires a peer of @nestjs/common@^6.0.0 but none is installed. You must install peer dependencies yourself.
+npm WARN @nestjs/passport@6.2.0 requires a peer of @nestjs/common@^6.0.0 but none is installed. You must install peer dependencies yourself.
+npm WARN @nestjs/passport@6.2.0 requires a peer of passport@^0.4.0 but none is installed. You must install peer dependencies yourself.
+npm WARN @nestjs/platform-express@6.11.11 requires a peer of @nestjs/common@^6.0.0 but none is installed. You must install peer dependencies yourself.
+npm WARN @nestjs/testing@6.11.11 requires a peer of @nestjs/common@^6.0.0 but none is installed. You must install peer dependencies yourself.
+npm WARN @nestjs/typeorm@6.3.4 requires a peer of @nestjs/common@^6.7.0 but none is installed. You must install peer dependencies yourself.
+npm WARN @nestjs/typeorm@6.3.4 requires a peer of typeorm@^0.2.7 but none is installed. You must install peer dependencies yourself.
+npm WARN winston-slack-webhook@0.1.6 requires a peer of winston@2.x.x but none is installed. You must install peer dependencies yourself.
+npm WARN @nestjs/common@9.1.2 requires a peer of rxjs@^7.1.0 but none is installed. You must install peer dependencies yourself.
+npm WARN ts-jest@29.0.1 requires a peer of typescript@>=4.3 but none is installed. You must install peer dependencies yourself.
+npm WARN @nestjs/swagger@6.1.2 requires a peer of @nestjs/core@^9.0.0 but none is installed. You must install peer dependencies yourself.
+npm WARN glee2@1.0.0 No repository field.
+
++ passport@0.6.0
++ nodemon@2.0.20
++ class-transformer@0.5.1
++ standard-version@9.5.0
++ moment-timezone@0.5.37
++ swagger-ui-express@4.5.0
++ jest@29.0.3
++ typeorm@0.2.45
++ @nestjs/common@9.1.2
++ typeorm@0.3.10
++ ts-jest@29.0.1
++ webpack-cli@4.10.0
++ express-jwt@7.7.5
++ @types/jest@29.0.3
++ @nestjs/swagger@6.1.2
+added 461 packages from 168 contributors, removed 360 packages, updated 277 packages and moved 5 packages in 32.606s
+
+49 packages are looking for funding
+  run `npm fund` for details
+
+fixed 634 of 641 vulnerabilities in 1389 scanned packages
+  7 vulnerabilities required manual review and could not be updated
+  9 package updates for 134 vulnerabilities involved breaking changes
+  (installed due to `--force` option)
+npm WARN using --force I sure hope you know what you are doing.
+npm WARN @nestjs/common@9.1.2 requires a peer of rxjs@^7.1.0 but none is installed. You must install peer dependencies yourself.
+npm WARN @nestjs/core@6.11.11 requires a peer of @nestjs/common@^6.0.0 but none is installed. You must install peer dependencies yourself.
+npm WARN @nestjs/cqrs@6.1.0 requires a peer of @nestjs/common@^6.0.0 but none is installed. You must install peer dependencies yourself.
+npm WARN @nestjs/cqrs@6.1.0 requires a peer of reflect-metadata@0.1.12 but none is installed. You must install peer dependencies yourself.
+npm WARN @nestjs/jwt@6.0.0 requires a peer of @nestjs/common@^6.0.0 but none is installed. You must install peer dependencies yourself.
+npm WARN @nestjs/passport@6.2.0 requires a peer of @nestjs/common@^6.0.0 but none is installed. You must install peer dependencies yourself.
+npm WARN @nestjs/passport@6.2.0 requires a peer of passport@^0.4.0 but none is installed. You must install peer dependencies yourself.
+npm WARN @nestjs/platform-express@6.11.11 requires a peer of @nestjs/common@^6.0.0 but none is installed. You must install peer dependencies yourself.
+npm WARN @nestjs/swagger@6.1.2 requires a peer of @nestjs/core@^9.0.0 but none is installed. You must install peer dependencies yourself.
+npm WARN @nestjs/testing@6.11.11 requires a peer of @nestjs/common@^6.0.0 but none is installed. You must install peer dependencies yourself.
+npm WARN @nestjs/typeorm@6.3.4 requires a peer of @nestjs/common@^6.7.0 but none is installed. You must install peer dependencies yourself.
+npm WARN @nestjs/typeorm@6.3.4 requires a peer of typeorm@^0.2.7 but none is installed. You must install peer dependencies yourself.
+npm WARN ts-jest@29.0.1 requires a peer of typescript@>=4.3 but none is installed. You must install peer dependencies yourself.
+npm WARN winston-slack-webhook@0.1.6 requires a peer of winston@2.x.x but none is installed. You must install peer dependencies yourself.
+npm WARN glee2@1.0.0 No repository field.
+
++ webpack@5.74.0
+added 21 packages from 23 contributors, removed 235 packages and updated 32 packages in 7.961s
+
+50 packages are looking for funding
+  run `npm fund` for details
+
+fixed 32 of 37 vulnerabilities in 1419 scanned packages
+  5 vulnerabilities required manual review and could not be updated
+  1 package update for 9 vulnerabilities involved breaking changes
+  (installed due to `--force` option)
+                                                                                
+                       === npm audit security report ===                        
+                                                                                
+# Run  npm update path-parse --depth 3  to resolve 1 vulnerability
+┌───────────────┬──────────────────────────────────────────────────────────────┐
+│ Moderate      │ Regular Expression Denial of Service in path-parse           │
+├───────────────┼──────────────────────────────────────────────────────────────┤
+│ Package       │ path-parse                                                   │
+├───────────────┼──────────────────────────────────────────────────────────────┤
+│ Dependency of │ tslint [dev]                                                 │
+├───────────────┼──────────────────────────────────────────────────────────────┤
+│ Path          │ tslint > resolve > path-parse                                │
+├───────────────┼──────────────────────────────────────────────────────────────┤
+│ More info     │ https://github.com/advisories/GHSA-hj48-42vr-x3v9            │
+└───────────────┴──────────────────────────────────────────────────────────────┘
+
+
+# Run  npm update kind-of --depth 10  to resolve 6 vulnerabilities
+┌───────────────┬──────────────────────────────────────────────────────────────┐
+│ High          │ Validation Bypass in kind-of                                 │
+├───────────────┼──────────────────────────────────────────────────────────────┤
+│ Package       │ kind-of                                                      │
+├───────────────┼──────────────────────────────────────────────────────────────┤
+│ Dependency of │ ts-loader [dev]                                              │
+├───────────────┼──────────────────────────────────────────────────────────────┤
+│ Path          │ ts-loader > micromatch > snapdragon > base > define-property │
+│               │ > is-descriptor > kind-of                                    │
+├───────────────┼──────────────────────────────────────────────────────────────┤
+│ More info     │ https://github.com/advisories/GHSA-6c8f-qphg-qjgp            │
+└───────────────┴──────────────────────────────────────────────────────────────┘
+
+
+┌───────────────┬──────────────────────────────────────────────────────────────┐
+│ High          │ Validation Bypass in kind-of                                 │
+├───────────────┼──────────────────────────────────────────────────────────────┤
+│ Package       │ kind-of                                                      │
+├───────────────┼──────────────────────────────────────────────────────────────┤
+│ Dependency of │ ts-loader [dev]                                              │
+├───────────────┼──────────────────────────────────────────────────────────────┤
+│ Path          │ ts-loader > micromatch > snapdragon > base > define-property │
+│               │ > is-descriptor > is-accessor-descriptor > kind-of           │
+├───────────────┼──────────────────────────────────────────────────────────────┤
+│ More info     │ https://github.com/advisories/GHSA-6c8f-qphg-qjgp            │
+└───────────────┴──────────────────────────────────────────────────────────────┘
+
+
+┌───────────────┬──────────────────────────────────────────────────────────────┐
+│ High          │ Validation Bypass in kind-of                                 │
+├───────────────┼──────────────────────────────────────────────────────────────┤
+│ Package       │ kind-of                                                      │
+├───────────────┼──────────────────────────────────────────────────────────────┤
+│ Dependency of │ ts-loader [dev]                                              │
+├───────────────┼──────────────────────────────────────────────────────────────┤
+│ Path          │ ts-loader > micromatch > braces > snapdragon > base >        │
+│               │ define-property > is-descriptor > is-accessor-descriptor >   │
+│               │ kind-of                                                      │
+├───────────────┼──────────────────────────────────────────────────────────────┤
+│ More info     │ https://github.com/advisories/GHSA-6c8f-qphg-qjgp            │
+└───────────────┴──────────────────────────────────────────────────────────────┘
+
+
+┌───────────────┬──────────────────────────────────────────────────────────────┐
+│ High          │ Validation Bypass in kind-of                                 │
+├───────────────┼──────────────────────────────────────────────────────────────┤
+│ Package       │ kind-of                                                      │
+├───────────────┼──────────────────────────────────────────────────────────────┤
+│ Dependency of │ ts-loader [dev]                                              │
+├───────────────┼──────────────────────────────────────────────────────────────┤
+│ Path          │ ts-loader > micromatch > extglob > expand-brackets >         │
+│               │ snapdragon > base > define-property > is-descriptor >        │
+│               │ is-accessor-descriptor > kind-of                             │
+├───────────────┼──────────────────────────────────────────────────────────────┤
+│ More info     │ https://github.com/advisories/GHSA-6c8f-qphg-qjgp            │
+└───────────────┴──────────────────────────────────────────────────────────────┘
+
+
+┌───────────────┬──────────────────────────────────────────────────────────────┐
+│ High          │ Validation Bypass in kind-of                                 │
+├───────────────┼──────────────────────────────────────────────────────────────┤
+│ Package       │ kind-of                                                      │
+├───────────────┼──────────────────────────────────────────────────────────────┤
+│ Dependency of │ ts-loader [dev]                                              │
+├───────────────┼──────────────────────────────────────────────────────────────┤
+│ Path          │ ts-loader > micromatch > braces > snapdragon-node >          │
+│               │ define-property > is-descriptor > kind-of                    │
+├───────────────┼──────────────────────────────────────────────────────────────┤
+│ More info     │ https://github.com/advisories/GHSA-6c8f-qphg-qjgp            │
+└───────────────┴──────────────────────────────────────────────────────────────┘
+
+
+┌───────────────┬──────────────────────────────────────────────────────────────┐
+│ High          │ Validation Bypass in kind-of                                 │
+├───────────────┼──────────────────────────────────────────────────────────────┤
+│ Package       │ kind-of                                                      │
+├───────────────┼──────────────────────────────────────────────────────────────┤
+│ Dependency of │ ts-loader [dev]                                              │
+├───────────────┼──────────────────────────────────────────────────────────────┤
+│ Path          │ ts-loader > micromatch > braces > snapdragon-node >          │
+│               │ define-property > is-descriptor > is-accessor-descriptor >   │
+│               │ kind-of                                                      │
+├───────────────┼──────────────────────────────────────────────────────────────┤
+│ More info     │ https://github.com/advisories/GHSA-6c8f-qphg-qjgp            │
+└───────────────┴──────────────────────────────────────────────────────────────┘
+
+
+┌──────────────────────────────────────────────────────────────────────────────┐
+│                                Manual Review                                 │
+│            Some vulnerabilities require your attention to resolve            │
+│                                                                              │
+│         Visit https://go.npm.me/audit-guide for additional guidance          │
+└──────────────────────────────────────────────────────────────────────────────┘
+┌───────────────┬──────────────────────────────────────────────────────────────┐
+│ Moderate      │ Inefficient Regular Expression Complexity in validator.js    │
+├───────────────┼──────────────────────────────────────────────────────────────┤
+│ Package       │ validator                                                    │
+├───────────────┼──────────────────────────────────────────────────────────────┤
+│ Patched in    │ >=13.7.0                                                     │
+├───────────────┼──────────────────────────────────────────────────────────────┤
+│ Dependency of │ class-validator                                              │
+├───────────────┼──────────────────────────────────────────────────────────────┤
+│ Path          │ class-validator > validator                                  │
+├───────────────┼──────────────────────────────────────────────────────────────┤
+│ More info     │ https://github.com/advisories/GHSA-qgmg-gppg-76g5            │
+└───────────────┴──────────────────────────────────────────────────────────────┘
+┌───────────────┬──────────────────────────────────────────────────────────────┐
+│ Moderate      │ SQL Injection and Cross-site Scripting in class-validator    │
+├───────────────┼──────────────────────────────────────────────────────────────┤
+│ Package       │ class-validator                                              │
+├───────────────┼──────────────────────────────────────────────────────────────┤
+│ Patched in    │ No patch available                                           │
+├───────────────┼──────────────────────────────────────────────────────────────┤
+│ Dependency of │ class-validator                                              │
+├───────────────┼──────────────────────────────────────────────────────────────┤
+│ Path          │ class-validator                                              │
+├───────────────┼──────────────────────────────────────────────────────────────┤
+│ More info     │ https://github.com/advisories/GHSA-fj58-h2fr-3pp2            │
+└───────────────┴──────────────────────────────────────────────────────────────┘
+┌───────────────┬──────────────────────────────────────────────────────────────┐
+│ High          │ Crash in HeaderParser in dicer                               │
+├───────────────┼──────────────────────────────────────────────────────────────┤
+│ Package       │ dicer                                                        │
+├───────────────┼──────────────────────────────────────────────────────────────┤
+│ Patched in    │ No patch available                                           │
+├───────────────┼──────────────────────────────────────────────────────────────┤
+│ Dependency of │ @nestjs/platform-express                                     │
+├───────────────┼──────────────────────────────────────────────────────────────┤
+│ Path          │ @nestjs/platform-express > multer > busboy > dicer           │
+├───────────────┼──────────────────────────────────────────────────────────────┤
+│ More info     │ https://github.com/advisories/GHSA-wm7h-9275-46v2            │
+└───────────────┴──────────────────────────────────────────────────────────────┘
+found 10 vulnerabilities (3 moderate, 7 high) in 1205 scanned packages
+  run `npm audit fix` to fix 7 of them.
+  3 vulnerabilities require manual review. See the full report for details.
+npm ERR! code ELIFECYCLE
+npm ERR! errno 2
+npm ERR! glee2@1.0.0 build: `tsc`
+npm ERR! Exit status 2
+npm ERR! 
+npm ERR! Failed at the glee2@1.0.0 build script.
+npm ERR! This is probably not a problem with npm. There is likely additional logging output above.
+
+npm ERR! A complete log of this run can be found in:
+npm ERR!     /home/circleci/.npm/_logs/2022-09-22T16_47_21_439Z-debug.log
+npm ERR! code ELIFECYCLE
+npm ERR! errno 2
+npm ERR! glee2@1.0.0 premigrations: `npm run build`
+npm ERR! Exit status 2
+npm ERR! 
+npm ERR! Failed at the glee2@1.0.0 premigrations script.
+npm ERR! This is probably not a problem with npm. There is likely additional logging output above.
+
+npm ERR! A complete log of this run can be found in:
+npm ERR!     /home/circleci/.npm/_logs/2022-09-22T16_47_21_448Z-debug.log
+
+Exited with code exit status 2
+CircleCI received exit code 2
