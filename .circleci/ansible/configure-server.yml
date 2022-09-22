@@ -22,7 +22,6 @@
       apt:
         name: 
           - python3
-          - python3-pip
 
   # Get the environment variables from CircleCI and add to the EC2 instance
   environment:
