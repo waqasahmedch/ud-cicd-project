@@ -2,6 +2,25 @@
 # See: https://circleci.com/docs/2.0/configuration-reference
 version: 2.1
 
+commands:
+  destroy-environment:
+    description: Destroy back-end and front-end cloudformation stacks given a workflow ID.
+    #parameters:
+      # Add parameter here   
+    steps:
+      - run:
+          name: Destroy backend environments
+          when: on_fail
+          command: |
+            aws cloudformation delete-stack --stack-name "udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7}"
+            exit 1
+      - run:
+          name: Destroy front end environments
+          when: on_fail
+          command: |
+            aws cloudformation delete-stack --stack-name "udapeople-frontend-${CIRCLE_WORKFLOW_ID:0:7}"
+            exit 1
+
 # Define a job to be invoked later in a workflow.
 # See: https://circleci.com/docs/2.0/configuration-reference/#jobs
 jobs:
@@ -125,7 +144,48 @@ jobs:
           paths: [backend/node_modules]
           key: backend-scan   
 
+#####################################################
+#  Deploy backend Infra 
+#####################################################
+  deploy-infrastructure:
+     docker:
+       - image: circleci/node:13.8.0
+     steps:
+       - checkout  
+       - run:
+          name: Ensure backend infrastructure exists 
+          command: | 
+            aws cloudformation deploy \
+                --template-file .circleci/files/backend.yml \
+                --tags project=udapeople \
+                --stack-name "udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7}" \
+                --parameter-overrides ID="${CIRCLE_WORKFLOW_ID:0:7}" 
+                exit 1 
+       - run:
+          name: Ensure frontend infrastructure exists 
+          command: | 
+            aws cloudformation deploy \
+                --template-file .circleci/files/frontend.yml \
+                --tags project=udapeople \
+                --stack-name "udapeople-frontend-${CIRCLE_WORKFLOW_ID:0:7}" \
+                --parameter-overrides ID="${CIRCLE_WORKFLOW_ID:0:7}" 
+                exit 1 
+       - run:
+          name: Add back-end ip to ansible inventory
+          command: |           
+               aws --region us-east-1 ec2 describe-instances \
+                   --filters "Name=tag:Name,Values=backend-${CIRCLE_WORKFLOW_ID:0:7}" \
+                   --query 'Reservations[*].Instances[*].[PublicIpAddress]' \
+                   --output text > ~/ud-cicd-project/.circleci/ansible/inventory.txt
 
+       - persist_to_workspace:
+          root: ~/
+          paths:
+            - ud-cicd-project/.circleci/ansible/inventory.txt
+       - run: 
+          command: destroy-environment   
+          when: on_fail
+          
 # Invoke jobs via workflows
 # See: https://circleci.com/docs/2.0/configuration-reference/#workflows
 workflows:
@@ -141,3 +201,5 @@ workflows:
           requires: [build-frontend]
       - scan-backend:
           requires: [build-backend]
+      - deploy-infrastructure:    
+          requires: [test-frontend, test-backend, scan-frontend, scan-backend]
