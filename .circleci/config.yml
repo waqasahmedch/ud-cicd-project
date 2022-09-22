@@ -19,7 +19,24 @@ commands:
           when: on_fail
           command: |
             aws cloudformation delete-stack --stack-name "udapeople-frontend-${CIRCLE_WORKFLOW_ID:0:7}"
-           
+
+  revert-migrations:
+    description: Revert the last migration if successfully run in the current workflow.
+    steps:
+      - run:
+          name: Revert migrations
+          # Add when this will run
+          command: |
+            # Curl 
+            # SUCCESS = 1
+            # if(( $SUCCESS==1 )); 
+            # then
+            #   cd ~/project/backend
+            #   npm install
+            #   Add revert code here. You can find this in the Getting Started section.
+            #   exit 1
+            # fi
+                       
 
 # Define a job to be invoked later in a workflow.
 # See: https://circleci.com/docs/2.0/configuration-reference/#jobs
@@ -244,6 +261,10 @@ jobs:
       - restore_cache:
           keys: [backend-scan, backend-test, backend-build]
 
+      # - run:
+      #     name: Installing AWS CLI for roll back 
+      #     command: |
+      #       apk add --no-cache aws-cli  
       - run:
           name: Run migrations
           command: |
@@ -251,7 +272,7 @@ jobs:
             npm install
             npm audit fix --audit-level=critical --force
             npm audit fix --force
-            npm audit --audit-level=critical           
+            npm audit --audit-level=critical                  
             npm run migrations > migrations_dump.txt            
       - run:
           name: Send migration results to memstash
