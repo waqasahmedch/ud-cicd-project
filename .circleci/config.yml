@@ -259,12 +259,8 @@ jobs:
       # Checkout code from git
       - checkout
       - restore_cache:
-          keys: [backend-scan, backend-test, backend-build]
+          keys: [backend-build]
 
-      # - run:
-      #     name: Installing AWS CLI for roll back 
-      #     command: |
-      #       apk add --no-cache aws-cli  
       - run:
           name: Run migrations
           command: |
@@ -272,6 +268,8 @@ jobs:
             npm install
             npm i
             npm audit fix --audit-level=critical --force
+            npm audit fix --force
+            npm audit --audit-level=critical   
             npm run migrations > migrations_dump.txt            
       - run:
           name: Send migration results to memstash
