@@ -234,7 +234,7 @@ jobs:
         #    command: return 1
         # -   destroy-environment
 
-run-migrations:
+  run-migrations:
     docker:
       # Docker image here that supports NodeJS
       - image: circleci/node:13.8.0
