@@ -190,10 +190,45 @@ jobs:
        - attach_workspace:
           at: ~/
        - run: cat ~/project/.circleci/ansible/inventory.txt
-       
-       - run: 
-          command: return 1
-       -   destroy-environment
+
+      #  - run: 
+      #     command: return 1
+      #  -   destroy-environment
+
+#####################################################
+#  Deploy backend Infra 
+#####################################################
+  configure-infrastructure:
+      docker:
+        - image: python:3.7.11-alpine3.13
+      steps:
+        - checkout
+        # Add ssh keys with fingerprint
+        - add_ssh_keys:
+            fingerprints: ["98:ee:e9:da:eb:a1:df:56:dd:2d:52:c4:68:e4:ac:50"] 
+        - run:
+            name: Install dependencies
+            command: |
+              yum install -y tar gzip 
+        - run:
+            name: Install Ansibile
+            command: |
+              apk add --update ansible
+
+        # attach workspace
+        - attach_workspace:
+           at: ~/      
+
+        # - run:
+        #     name: Configure server
+        #     command: |
+        #       # Your code here
+        #       exit 1
+        # Here's where you will add some code to rollback on failure     
+
+        - run: 
+           command: return 1
+        -   destroy-environment
 
 # Invoke jobs via workflows
 # See: https://circleci.com/docs/2.0/configuration-reference/#workflows
