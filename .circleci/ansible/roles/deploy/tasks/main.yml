@@ -12,7 +12,7 @@
 - name: "install dependencies."
   become: true
   apt:
-    name: ["nodejs", "npm"]
+    name: ["nodejs", "npm", "tar", "gzip"]
     state: latest
     update_cache: yes
 
@@ -23,10 +23,28 @@
     global: yes
     production: yes
     state: present
+
+- name: "Creating backend directory"
+  become: true
+  file: 
+    path: /home/ubuntu/backend 
+    owner: ubuntu
+    group: ubuntu
+    mode: 770
+    state: directory  
+
 - name: "Copy files"
+  become: true
   copy:
-    src: /root/project/backend
-    dest: /home/ubuntu
+    src: /root/project/backend/artifact.tar.gz
+    dest: /home/ubuntu/backend
+
+- name: "extracting zip file"
+  become: true
+  ansible.builtin.unarchive:
+    src: /home/ubuntu/backend/artifact.tar.gz
+    dest: /home/ubuntu/backend
+    remote_src: yes
 - name: "node install, run build & starting application"
   shell:
     cd /home/ubuntu/backend
