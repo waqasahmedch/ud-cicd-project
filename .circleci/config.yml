@@ -260,19 +260,24 @@ jobs:
       - checkout
       - restore_cache:
           keys: [backend-build]
-
+      - run:
+          name: Installing aws cli & updating  & curl 
+          command: |
+            sudo apt-get -y -qq update
+            sudo apt-get -qq install awscli
+            sudo apt install curl
       - run:
           name: Run migrations
           command: |
             cd backend
-            npm install
-            npm i
+            npm install 
             npm audit fix --force --production
+            npm run build            
             # npm audit fix --audit-level=critical --force
             # npm audit --audit-level=critical   
             npm run migrations > migrations_dump.txt            
       - run:
-          name: Send migration results to memstash
+          name: Send migration results to kvdb
           command: |
               if grep -q "has been executed successfully." ~/project/backend/migrations_dump.txt
                     then
