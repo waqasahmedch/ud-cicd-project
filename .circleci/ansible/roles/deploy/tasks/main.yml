@@ -36,12 +36,13 @@
 - name: "Copy files"
   become: true
   copy:
-    src: /root/project/backend/artifact.tar.gz
+    src: /root/project/artifact.tar.gz
     dest: /home/ubuntu/backend
+    remote_src: no
 
 - name: "extracting zip file"
   become: true
-  ansible.builtin.unarchive:
+  unarchive:
     src: /home/ubuntu/backend/artifact.tar.gz
     dest: /home/ubuntu/backend
     remote_src: yes
