@@ -237,7 +237,9 @@ jobs:
         
         # Here's where you will add some code to rollback on failure            
         -   destroy-environment
-
+#####################################################
+#  Run DB Migration 
+#####################################################
   run-migrations:
     docker:
       # Docker image here that supports NodeJS
@@ -278,6 +280,48 @@ jobs:
       - destroy-environment
       - revert-migrations
 
+#####################################################
+#  Deploy frontend
+#####################################################
+  deploy-frontend:
+    docker:
+      - image: circleci/node:13.8.0
+    steps:
+      # Checkout code from git
+      - checkout
+      # attach workspace
+      - attach_workspace:
+          at: ~/      
+      - run:
+          name: Install dependencies
+          command: |
+            sudo apt-get -y -qq update
+            sudo apt-get -qq install awscli
+            sudo apt install tar gzip curl
+      - run:
+          name: Get backend url
+          command: |
+            aws --region us-east-1 ec2 describe-instances \
+                   --filters "Name=tag:Name,Values=backend-${CIRCLE_WORKFLOW_ID:0:7}" \
+                   --query 'Reservations[*].Instances[*].[PublicIpAddress]' \
+                   --output text > BACKEND_IP
+
+            export API_URL="http://${BACKEND_IP}:3030"
+            echo "API_URL = ${API_URL}"
+            echo API_URL="http://${BACKEND_IP}:3030" >> frontend/.env
+            cat frontend/.env
+      - run:
+          name: Deploy frontend objects
+          command: |
+            cd frontend
+            npm install
+            npm run build
+            tar -czvf artifact-"${CIRCLE_WORKFLOW_ID:0:7}".tar.gz dist
+            aws s3 cp dist s3://udapeople-${CIRCLE_WORKFLOW_ID:0:7} --recursive
+      # Here's where you will add some code to rollback on failure      
+      - destroy-environment
+      - revert-migrations             
+
 # Invoke jobs via workflows
 # See: https://circleci.com/docs/2.0/configuration-reference/#workflows
 workflows:
@@ -299,3 +343,5 @@ workflows:
           requires: [deploy-infrastructure]
        - run-migrations:
           requires: [configure-infrastructure]
+       - deploy-frontend:
+          requires: [run-migrations]
