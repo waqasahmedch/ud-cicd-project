@@ -22,7 +22,7 @@ commands:
           name: Revert migrations
           # Add when this will run
           command: |
-            curl --insecure https://kvdb.io/KvQh27UrJqkHvbUihqtrPG/migration_${CIRCLE_WORKFLOW_ID:0:7} > SUCCESS 
+            SUCCESS=$(curl --insecure  https://kvdb.io/KvQh27UrJqkHvbUihqtrPG/migration_${CIRCLE_WORKFLOW_ID:0:7})
             if(( $SUCCESS==1 )); 
               then
                 cd ~/project/backend
@@ -320,7 +320,48 @@ jobs:
             aws s3 cp dist s3://udapeople-${CIRCLE_WORKFLOW_ID:0:7} --recursive
       # Here's where you will add some code to rollback on failure      
       - destroy-environment
-      - revert-migrations             
+
+  deploy-backend:
+    docker:
+      - image: python:3.7.11-alpine3.13
+    steps:
+      # Checkout code from git
+      - checkout
+      # Add ssh keys with fingerprint
+      - add_ssh_keys:
+          fingerprints: ["98:ee:e9:da:eb:a1:df:56:dd:2d:52:c4:68:e4:ac:50"] 
+      # attach workspace
+      - attach_workspace:
+          at: ~/      
+      - run:
+          name: install tar zip 
+          command: |
+            apk add tar gzip 
+      - run:
+          name: install ansible
+          command: |
+            apk add --update ansible 
+      - run:
+          name: install aws cli 
+          command: |
+            apk add --no-cache aws-cli 
+
+      - run:
+          name: Deploy backend
+          command: |
+            cd backend
+            npm i
+            npm run build
+            cd ..
+            # Zip the directory
+            tar -C backend -czvf artifact.tar.gz .
+            cd .circleci/ansible
+            echo "Contents  of the inventory.txt file is -------"
+            cat inventory.txt
+            ansible-playbook -i inventory.txt deploy-backend.yml
+      # Here's where you will add some code to rollback on failure  
+      - destroy-environment
+
 
 # Invoke jobs via workflows
 # See: https://circleci.com/docs/2.0/configuration-reference/#workflows
