@@ -235,8 +235,9 @@ jobs:
             name: adding env varaibles to backend 
             command: |
                 cd ~/project
+                echo ENVIRONMENT=production >> "backend/.env"
                 echo TYPEORM_CONNECTION=$TYPEORM_CONNECTION >> "backend/.env"
-                echo TYPEORM_ENTITIES=$TYPEORM_ENTITIES >> "backend/.env"
+                echo TYPEORM_ENTITIES="./modules/domain/**/*.entity{.ts,.js}" >> "backend/.env"
                 echo TYPEORM_HOST=$TYPEORM_HOST >> "backend/.env"
                 echo TYPEORM_PORT=$TYPEORM_PORT >> "backend/.env"
                 echo TYPEORM_PASSWORD=$TYPEORM_PASSWORD >> "backend/.env"
