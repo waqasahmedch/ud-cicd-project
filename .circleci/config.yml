@@ -232,6 +232,19 @@ jobs:
            at: ~/      
 
         - run:
+            name: adding env varaibles to backend 
+            command: |
+                cd ~/project
+                echo TYPEORM_CONNECTION=$TYPEORM_CONNECTION >> "backend/.env"
+                echo TYPEORM_ENTITIES=$TYPEORM_ENTITIES >> "backend/.env"
+                echo TYPEORM_HOST=$TYPEORM_HOST >> "backend/.env"
+                echo TYPEORM_PORT=$TYPEORM_PORT >> "backend/.env"
+                echo TYPEORM_PASSWORD=$TYPEORM_PASSWORD >> "backend/.env"
+                echo TYPEORM_DATABASE=$TYPEORM_DATABASE >> "backend/.env"      
+                echo TYPEORM_USERNAME=$TYPEORM_USERNAME >> "backend/.env"
+                echo TYPEORM_MIGRATIONS_DIR=$TYPEORM_MIGRATIONS_DIR >> "backend/.env"
+                echo TYPEORM_MIGRATIONS=$TYPEORM_MIGRATIONS >> "backend/.env"
+        - run:
              name: Configure server
              command: |
                 ansible-playbook -i ~/project/.circleci/ansible/inventory.txt ~/project/.circleci/ansible/configure-server.yml
@@ -272,8 +285,10 @@ jobs:
           command: |
               if grep -q "has been executed successfully." ~/project/backend/migrations_dump.txt
                     then
+                        echo "Migration was successfull."
                         curl --insecure https://kvdb.io/KvQh27UrJqkHvbUihqtrPG/migration_${CIRCLE_WORKFLOW_ID:0:7}  -d '1'
                     else
+                        echo "Migration was failed."
                         curl --insecure https://kvdb.io/KvQh27UrJqkHvbUihqtrPG/migration_${CIRCLE_WORKFLOW_ID:0:7}  -d '0'
               fi
 
@@ -386,7 +401,7 @@ jobs:
           command: |
             apk add --no-cache aws-cli 
       - run:
-          name: Get backend url
+          name: Get backend url & perform smoke test
           command: |
             # your code here
             export BACKEND_IP=$(aws --region us-east-1 ec2 describe-instances \
@@ -394,11 +409,6 @@ jobs:
                    --query 'Reservations[*].Instances[*].[PublicIpAddress]' \
                    --output text)
             export API_URL="http://${BACKEND_IP}:3030"
-            echo "${API_URL}"
-      - run:
-          name: Backend smoke test.
-          command: |
-            # your code here
             echo "${API_URL}"
             if curl -s "${API_URL}/api/status" | grep "ok"
               then
