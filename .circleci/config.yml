@@ -9,15 +9,10 @@ commands:
       # Add parameter here   
     steps:
       - run:
-          name: Destroy backend environments
+          name: Destroy backend & frontend environments
           when: on_fail
           command: |
-            aws cloudformation delete-stack --stack-name "udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7}"
-            
-      - run:
-          name: Destroy front end environments
-          when: on_fail
-          command: |
+            aws cloudformation delete-stack --stack-name "udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7}"          
             aws cloudformation delete-stack --stack-name "udapeople-frontend-${CIRCLE_WORKFLOW_ID:0:7}"
 
   revert-migrations:
@@ -27,15 +22,13 @@ commands:
           name: Revert migrations
           # Add when this will run
           command: |
-            # Curl 
-            # SUCCESS = 1
-            # if(( $SUCCESS==1 )); 
-            # then
-            #   cd ~/project/backend
-            #   npm install
-            #   npm run migrations:revert
-            #   exit 1
-            # fi
+            curl --insecure https://kvdb.io/FhjoK7LK4GrnLz8M3vMkyy/migration_${CIRCLE_WORKFLOW_ID:0:7} > SUCCESS 
+            if(( $SUCCESS==1 )); 
+              then
+                cd ~/project/backend
+                npm install
+                npm run migrations:revert            
+            fi
                        
 
 # Define a job to be invoked later in a workflow.
@@ -77,7 +70,6 @@ jobs:
             cd backend
             npm install
             npm run build             
-#            exit 1
       - save_cache:
           paths: [backend/node_modules]
           key: backend-build      
@@ -208,9 +200,7 @@ jobs:
            at: ~/
        - run: cat ~/project/.circleci/ansible/inventory.txt
 
-      #  - run: 
-      #     command: return 1
-      #  -   destroy-environment
+       -   destroy-environment
 
 #####################################################
 #  Deploy backend Infra 
@@ -245,11 +235,8 @@ jobs:
              command: |
                 ansible-playbook -i ~/project/.circleci/ansible/inventory.txt ~/project/.circleci/ansible/configure-server.yml
         
-        # Here's where you will add some code to rollback on failure     
-
-        # - run: 
-        #    command: return 1
-        # -   destroy-environment
+        # Here's where you will add some code to rollback on failure            
+        -   destroy-environment
 
   run-migrations:
     docker:
@@ -271,25 +258,25 @@ jobs:
           command: |
             cd backend
             npm install 
-            npm audit fix --force --production
-            npm run build            
+            # npm audit fix --force --production
+            # npm run build            
             # npm audit fix --audit-level=critical --force
             # npm audit --audit-level=critical   
             npm run migrations > migrations_dump.txt            
+
       - run:
           name: Send migration results to kvdb
           command: |
               if grep -q "has been executed successfully." ~/project/backend/migrations_dump.txt
                     then
                         curl https://kvdb.io/FhjoK7LK4GrnLz8M3vMkyy/migration_${CIRCLE_WORKFLOW_ID:0:7}  -d '1'
+                    else
+                        curl https://kvdb.io/FhjoK7LK4GrnLz8M3vMkyy/migration_${CIRCLE_WORKFLOW_ID:0:7}  -d '0'
               fi
 
-
      # Here's where you will add some code to rollback on failure      
-      - run: 
-           command: return 1
-      -   destroy-environment
-
+      - destroy-environment
+      - revert-migrations
 
 # Invoke jobs via workflows
 # See: https://circleci.com/docs/2.0/configuration-reference/#workflows
