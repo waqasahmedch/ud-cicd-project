@@ -35,7 +35,7 @@ commands:
 # See: https://circleci.com/docs/2.0/configuration-reference/#jobs
 jobs:
 #####################################################
-#  Building Frontend
+# 1 -  Building Frontend
 #####################################################
   build-frontend:
     docker:
@@ -55,7 +55,7 @@ jobs:
           paths: [frontend/node_modules]
           key: frontend-build
 #####################################################
-#  Building Backend
+# 2 - Building Backend
 #####################################################
   build-backend:
     docker:
@@ -74,7 +74,7 @@ jobs:
           paths: [backend/node_modules]
           key: backend-build      
 #####################################################
-#  Test Front end
+# 3 - Test Front end
 #####################################################
   test-frontend:
     docker:
@@ -93,7 +93,7 @@ jobs:
           paths: [frontend/node_modules]
           key: frontend-test     
 #####################################################
-#  Test Backend
+# 4 - Test Backend
 #####################################################
   test-backend:
     docker:
@@ -112,7 +112,7 @@ jobs:
           paths: [backend/node_modules]
           key: backend-test     
 #####################################################
-#  Scan front end 
+# 5 - Scan front end 
 #####################################################
   scan-frontend:
     docker:
@@ -132,7 +132,7 @@ jobs:
           paths: [frontend/node_modules]
           key: frontend-scan   
 #####################################################
-#  Scan back end 
+# 6- Scan back end 
 #####################################################
   scan-backend:
     docker:
@@ -154,7 +154,7 @@ jobs:
           key: backend-scan   
 
 #####################################################
-#  Deploy backend Infra 
+# 7 - Deploy backend Infra 
 #####################################################
   deploy-infrastructure:
      docker:
@@ -203,7 +203,7 @@ jobs:
        -   destroy-environment
 
 #####################################################
-#  Deploy backend Infra 
+# 8 - Deploy backend Infra 
 #####################################################
   configure-infrastructure:
       docker:
@@ -238,7 +238,7 @@ jobs:
         # Here's where you will add some code to rollback on failure            
         -   destroy-environment
 #####################################################
-#  Run DB Migration 
+# 9 - Run DB Migration 
 #####################################################
   run-migrations:
     docker:
@@ -279,9 +279,8 @@ jobs:
      # Here's where you will add some code to rollback on failure      
       - destroy-environment
       - revert-migrations
-
 #####################################################
-#  Deploy frontend
+# 10 - Deploy frontend
 #####################################################
   deploy-frontend:
     docker:
@@ -320,7 +319,9 @@ jobs:
             aws s3 cp dist s3://udapeople-${CIRCLE_WORKFLOW_ID:0:7} --recursive
       # Here's where you will add some code to rollback on failure      
       - destroy-environment
-
+#####################################################
+# 11 - Deploy backend
+#####################################################
   deploy-backend:
     docker:
       - image: python:3.7.11-alpine3.13
@@ -336,7 +337,7 @@ jobs:
       - run:
           name: install tar zip 
           command: |
-            apk add tar gzip 
+            apk add tar gzip npm nodejs curl
       - run:
           name: install ansible
           command: |
@@ -362,7 +363,60 @@ jobs:
             ansible-playbook -i inventory.txt deploy-backend.yml
       # Here's where you will add some code to rollback on failure  
       - destroy-environment
+#####################################################
+# 12 -  Smoke Test
+#####################################################
 
+  smoke-test:
+    docker:
+      - image: python:3.7.11-alpine3.13        
+    steps:
+      # Checkout code from git
+      - checkout
+      - run:
+          name: Install dependencies
+          command: |
+            apk install curl tar gzip 
+      - run:
+          name: install aws cli 
+          command: |
+            apk add --no-cache aws-cli 
+      - run:
+          name: Get backend url
+          command: |
+            # your code here
+            aws --region us-east-1 ec2 describe-instances \
+                   --filters "Name=tag:Name,Values=backend-${CIRCLE_WORKFLOW_ID:0:7}" \
+                   --query 'Reservations[*].Instances[*].[PublicIpAddress]' \
+                   --output text > BACKEND_IP
+            export API_URL="http://${BACKEND_IP}:3030"
+            echo "${API_URL}"
+      - run:
+          name: Backend smoke test.
+          command: |
+            # your code here
+            if curl "${API_URL}/api/status" | grep "ok"
+              then
+                  return 0
+              else
+                  return 1
+            fi
+      - run:
+          name: Frontend smoke test.
+          command: |
+            # your code here
+            URL="http://udapeople-${CIRCLE_WORKFLOW_ID:0:7}.s3-website-us-east-1.amazonaws.com/#/employees"            
+            echo ${URL} 
+            if curl -s ${URL} | grep "Welcome"
+              then
+                # Change this to 0 after the job fails
+                return 1
+              else
+                return 1
+            fi
+
+      # Here's where you will add some code to rollback on failure  
+      - destroy-environment
 
 # Invoke jobs via workflows
 # See: https://circleci.com/docs/2.0/configuration-reference/#workflows
