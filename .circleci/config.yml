@@ -12,6 +12,7 @@ commands:
           name: Destroy backend & frontend environments
           when: on_fail
           command: |
+            aws s3 rm "s3://udapeople-${CIRCLE_WORKFLOW_ID:0:7}" --recursive
             aws cloudformation delete-stack --stack-name "udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7}"          
             aws cloudformation delete-stack --stack-name "udapeople-frontend-${CIRCLE_WORKFLOW_ID:0:7}"
 
@@ -21,6 +22,7 @@ commands:
       - run:
           name: Revert migrations
           # Add when this will run
+          when: on_fail
           command: |
              SUCCESS=$(curl --insecure  https://kvdb.io/KvQh27UrJqkHvbUihqtrPG/migration_${CIRCLE_WORKFLOW_ID:0:7})
              if(( $SUCCESS==1 )); 
@@ -28,8 +30,7 @@ commands:
                 cd ~/project/backend
                 npm install
                 npm run migrations:revert            
-             fi
-                       
+             fi                       
 
 # Define a job to be invoked later in a workflow.
 # See: https://circleci.com/docs/2.0/configuration-reference/#jobs
@@ -349,6 +350,7 @@ jobs:
 
       - run:
           name: Deploy backend
+          no_output_timeout: 15m
           command: |
             cd backend
             npm install 
@@ -363,6 +365,7 @@ jobs:
             ansible-playbook -i inventory.txt deploy-backend.yml
       # Here's where you will add some code to rollback on failure  
       - destroy-environment
+      - revert-migrations
 #####################################################
 # 12 -  Smoke Test
 #####################################################
@@ -417,6 +420,36 @@ jobs:
 
       # Here's where you will add some code to rollback on failure  
       - destroy-environment
+      - revert-migrations
+
+#####################################################
+# 13 -  cloud front update
+#####################################################
+  cloudfront-update:
+    docker:
+       - image: amazon/aws-cli
+    steps:
+       - checkout  
+       - run:
+          name: installing tar package to persist the file 
+          command: | 
+               yum install -y tar gzip        
+       - run:
+          name: Update cloudfront distribution
+          command: |
+            # your code here
+            aws cloudformation deploy \
+              --template-file .circleci/files/cloudfront.yml \
+              --stack-name InitialStack \
+              --parameter-overrides WorkflowID="udapeople-${CIRCLE_WORKFLOW_ID:0:7}" \
+              --tags project=udapeople
+      # Here's where you will add some code to rollback on failure  
+       - destroy-environment
+       
+#####################################################
+# 14 -  clean up 
+#####################################################
+
 
 # Invoke jobs via workflows
 # See: https://circleci.com/docs/2.0/configuration-reference/#workflows
@@ -443,3 +476,5 @@ workflows:
           requires: [run-migrations]
        - deploy-backend:   
           requires: [run-migrations, deploy-frontend]
+       - smoke-test:
+          requires: [deploy-backend, deploy-frontend]          
