@@ -411,9 +411,9 @@ jobs:
                    --output text)
             export API_URL="http://${BACKEND_IP}:3030"
             echo "${API_URL}"
-            export API_STATUS=$(curl -s "${API_URL}/api/status")
-            echo "${API_STATUS}"
             sleep 60
+            export API_STATUS=$(curl -I "${API_URL}/api/status")
+            echo "${API_STATUS}"            
             if "${API_STATUS}" | grep "ok"
               then
                   return 0
