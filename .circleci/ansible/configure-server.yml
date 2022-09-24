@@ -27,7 +27,7 @@
   environment:
     - TYPEORM_CONNECTION: "{{ lookup('env', 'TYPEORM_CONNECTION')}}"  
     # Add more env vars here
-    - TYPEORM_ENTITIES: "./modules/domain/**/*.entity{.ts,.js}"
+    - TYPEORM_ENTITIES: "{{ lookup('env', 'TYPEORM_ENTITIES')}}"
     - TYPEORM_HOST: "{{ lookup('env', 'TYPEORM_HOST')}}"
     - TYPEORM_PORT: 5432
     - TYPEORM_USERNAME: "{{ lookup('env', 'TYPEORM_USERNAME')}}"
