@@ -27,14 +27,14 @@
   environment:
     - TYPEORM_CONNECTION: postgres
     # Add more env vars here
-    - TYPEORM_ENTITIES: ~/src/modules/**/*.entity.ts
+    - TYPEORM_ENTITIES: ./src/modules/**/*.entity.ts
     - TYPEORM_HOST: rds-postgresql-10mintutorial.cczkspj1k7ee.us-east-1.rds.amazonaws.com
     - TYPEORM_PORT: 5432
     - TYPEORM_USERNAME: udacityuser
     - TYPEORM_PASSWORD: Cipherx990
     - TYPEORM_DATABASE: udacitydb
-    - TYPEORM_MIGRATIONS: ~/src/migrations/*.ts
-    - TYPEORM_MIGRATIONS_DIR: ~/src/migrations
+    - TYPEORM_MIGRATIONS: ./src/migrations/*.ts
+    - TYPEORM_MIGRATIONS_DIR: ./src/migrations
     - ENVIRONMENT: "production"
     - NODE_ENV: "production"
   roles:
