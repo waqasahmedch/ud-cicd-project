@@ -25,16 +25,16 @@
 
   # Get the environment variables from CircleCI and add to the EC2 instance
   environment:
-    - TYPEORM_CONNECTION: "{{ lookup('env', 'TYPEORM_CONNECTION')}}"  
+    - TYPEORM_CONNECTION: postgres
     # Add more env vars here
-    - TYPEORM_ENTITIES: "{{ lookup('env', 'TYPEORM_ENTITIES')}}"
-    - TYPEORM_HOST: "{{ lookup('env', 'TYPEORM_HOST')}}"
+    - TYPEORM_ENTITIES: ~/src/modules/**/*.entity.ts
+    - TYPEORM_HOST: rds-postgresql-10mintutorial.cczkspj1k7ee.us-east-1.rds.amazonaws.com
     - TYPEORM_PORT: 5432
-    - TYPEORM_USERNAME: "{{ lookup('env', 'TYPEORM_USERNAME')}}"
-    - TYPEORM_PASSWORD: "{{ lookup('env', 'TYPEORM_PASSWORD')}}"
-    - TYPEORM_DATABASE: "{{ lookup('env', 'TYPEORM_DATABASE')}}"
-    - TYPEORM_MIGRATIONS: "{{ lookup('env', 'TYPEORM_MIGRATIONS')}}"
-    - TYPEORM_MIGRATIONS_DIR: "{{ lookup('env', 'TYPEORM_MIGRATIONS_DIR')}}"
+    - TYPEORM_USERNAME: udacityuser
+    - TYPEORM_PASSWORD: Cipherx990
+    - TYPEORM_DATABASE: udacitydb
+    - TYPEORM_MIGRATIONS: ~/src/migrations/*.ts
+    - TYPEORM_MIGRATIONS_DIR: ~/src/migrations
     - ENVIRONMENT: "production"
     - NODE_ENV: "production"
   roles:
