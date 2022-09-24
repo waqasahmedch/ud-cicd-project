@@ -22,15 +22,15 @@ commands:
       - run:
           name: Revert migrations
           # Add when this will run
-          when: on_fail
+          # when: on_fail
           command: |
-              SUCCESS=$(curl --insecure  https://kvdb.io/KvQh27UrJqkHvbUihqtrPG/migration_${CIRCLE_WORKFLOW_ID:0:7})
-              if(( $SUCCESS==1 )); 
-                then
+              # SUCCESS=$(curl --insecure  https://kvdb.io/KvQh27UrJqkHvbUihqtrPG/migration_${CIRCLE_WORKFLOW_ID:0:7})
+              # if(( $SUCCESS==1 )); 
+              #  then
                 cd ~/project/backend
                 npm install
                 npm run migrations:revert            
-              fi                       
+              # fi                       
 
 # Define a job to be invoked later in a workflow.
 # See: https://circleci.com/docs/2.0/configuration-reference/#jobs
@@ -411,7 +411,7 @@ jobs:
                    --output text)
             export API_URL="http://${BACKEND_IP}:3030"
             echo "${API_URL}"
-            sleep 60
+            sleep 90
             export API_STATUS=$(curl -I "${API_URL}/api/status")
             echo "${API_STATUS}"            
             if "${API_STATUS}" | grep "ok"
