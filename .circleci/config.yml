@@ -24,13 +24,13 @@ commands:
           # Add when this will run
           # when: on_fail
           command: |
-              # SUCCESS=$(curl --insecure  https://kvdb.io/KvQh27UrJqkHvbUihqtrPG/migration_${CIRCLE_WORKFLOW_ID:0:7})
-              # if(( $SUCCESS==1 )); 
-              #  then
+              SUCCESS=$(curl --insecure  https://kvdb.io/KvQh27UrJqkHvbUihqtrPG/migration_${CIRCLE_WORKFLOW_ID:0:7})
+              if(( $SUCCESS==1 )); 
+                then
                 cd ~/project/backend
                 npm install
                 npm run migrations:revert            
-              # fi                       
+              fi                       
 
 # Define a job to be invoked later in a workflow.
 # See: https://circleci.com/docs/2.0/configuration-reference/#jobs
@@ -402,6 +402,20 @@ jobs:
           command: |
             apk add --no-cache aws-cli 
       - run:
+          name: Frontend smoke test.
+          command: |
+            # your code here
+            URL="http://udapeople-${CIRCLE_WORKFLOW_ID:0:7}.s3-website-us-east-1.amazonaws.com/#/employees"            
+            echo ${URL} 
+            if curl -s ${URL} | grep "Welcome"
+              then
+                # Change this to 0 after the job fails
+                return 1
+              else
+                return 1
+            fi
+
+      - run:
           name: Get backend url & perform smoke test
           command: |
             # your code here
@@ -420,20 +434,6 @@ jobs:
               else
                   return 1
             fi
-      - run:
-          name: Frontend smoke test.
-          command: |
-            # your code here
-            URL="http://udapeople-${CIRCLE_WORKFLOW_ID:0:7}.s3-website-us-east-1.amazonaws.com/#/employees"            
-            echo ${URL} 
-            if curl -s ${URL} | grep "Welcome"
-              then
-                # Change this to 0 after the job fails
-                return 1
-              else
-                return 1
-            fi
-
       # Here's where you will add some code to rollback on failure  
       - destroy-environment
       - revert-migrations
