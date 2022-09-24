@@ -28,7 +28,7 @@
   become: true
   shell: 
     pm2 stop all
-    pm2 start npm --name "backend-udapeople" -- run start 
+    pm2 start npm --name "backend-udapeople" -- start 
     env PATH=$PATH:/usr/local/bin pm2 startup -u ubuntu
 
 - name: "checkign npm service status"    
