@@ -44,7 +44,7 @@
 
 # - name: "checkign npm service status"    
 #   become: true
-#   shell: 
-#      pm2 describe "backend-udapeople"
-#   register: command_output_npm      
+#   shell:     
+#     pm2 describe
+#    register: command_output_npm      
 # - debug: var=command_output_npm.stdout_lines
