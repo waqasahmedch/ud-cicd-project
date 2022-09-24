@@ -24,6 +24,16 @@
     production: yes
     state: present
 
+- name: "upgrade packages"
+  become: true
+  apt:
+    upgrade: yes
+
+- name: "update apt packages."
+  become: true
+  apt:
+    update_cache: yes
+
 - name: "starting pm2 service"    
   become: true
   shell: 
